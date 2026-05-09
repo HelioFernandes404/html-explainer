@@ -1,168 +1,199 @@
 ---
 name: holistic-html
-description: Produce a single self-contained HTML file instead of markdown for any output that benefits from visual structure — documentation, reports, plans, code reviews, explainers, status updates, slide decks, diagrams, post-mortems, comparisons, or catalogs. Use this skill whenever the user asks for a writeup, a doc, a plan, an explanation, or anything with multiple sections, comparisons, timelines, code with annotations, or that would otherwise become a wall of markdown text — even when the user does not explicitly say "HTML". The output must use the project's signature warm editorial visual language: ivory background, serif titles with italic clay accents, sans-serif body, monospace labels, numbered section heads, card grids with subtle hover lift, and a serif-italic footer signature.
+description: Produce a self-contained HTML file instead of markdown for any output that benefits from visual structure. Use this skill whenever the user asks for documentation, a report, a writeup, a plan, an explanation, a code review summary, a diagram, a status update, a slide deck, or any content that would otherwise become a wall of markdown text. Even when the user doesn't say "HTML" — if the output has structure, comparisons, timelines, code with annotations, or multiple sections, an HTML file will serve them far better. Always produce a single self-contained `.html` file, ready to open in a browser, styled with the project's GitHub Dark Minimalist design system.
 ---
 
 # holistic-html
 
-Output a single self-contained `.html` file styled to match the project's example pages (`index.html` and the 20 numbered files in the project root). The aesthetic is **warm, editorial, confident** — closer to a New Yorker explainer than a Notion page or GitHub README.
+When producing output that has meaningful structure — comparisons, phases, timelines, code explanations, reports, plans — a self-contained HTML file is almost always better than markdown. Markdown gets skimmed; HTML gets read.
 
-## Process
+Your job is to:
+1. Identify which structural pattern fits the request
+2. Build a complete self-contained HTML using the project's dark design system
+3. Write the file to disk and tell the user where it is
 
-1. **Copy** `assets/base-template.html` as your starting point — it has all tokens, signature elements, and the layout containers ready.
-2. **Pick the pattern** from the table below. Read its full recipe in `references/pattern-catalog.md`.
-3. **Read the reference example** at `/home/helio/Work/holistic-vision/<NN>-<name>.html` for structural detail when you need it.
-4. **Replace placeholders** with the user's actual content — never leave Lorem Ipsum.
-5. **Write** to a descriptive filename (e.g., `auth-rate-limiting.html`, `week-23-status.html`, `comments-thread-plan.html`).
-6. **Open** in browser if available: `xdg-open <file>.html`.
-7. **Tell the user** the filename and the pattern you used.
+---
 
-## Visual signature — required on every page
+## Design system
 
-These elements are what make output look like *this project*, not a generic doc. Include all that apply.
+Read the full design system from `references/design-tokens.md` before writing any HTML. Use those tokens, not the warm ivory/clay palette from the example files in the project.
 
-| Element | Recipe |
-|---|---|
-| **Eyebrow** | `<div class="eyebrow">LABEL</div>` — mono, 12px, uppercase, `letter-spacing: 0.12em`, gray-500, with a 24px×1.5px `--clay` line via `::before` |
-| **Hero h1** | serif, weight 500, `clamp(38px, 5.4vw, 62px)`, `line-height: 1.06`, `letter-spacing: -0.018em`, `max-width: 17ch`. Italic `<em>` colored `--clay` |
-| **Lede** | `.intro` — 16.5px sans, gray-700, max-width 620px |
-| **Section head** (when sectioned) | `.sec-head` with `.idx` (mono 13px clay 600 weight, 34px wide) + serif h2 + optional `.count` pill (mono 11px on g100, radius 999px) |
-| **Footer** | `.k` element in serif italic, gray-700, with a quiet supporting line |
-
-The italic `<em>` in the h1 colored `--clay` is the most distinctive single touch. Always use it on titles that have a natural emphasis word ("The unreasonable *effectiveness* of HTML", "How *rate limiting* works", "Cycle 14 *triage*").
-
-## Pattern selection
-
-| Request type | Pattern | Reference |
-|---|---|---|
-| Compare 2–4 approaches/options | Side-by-side panels | `01-exploration-code-approaches.html`, `02-exploration-visual-designs.html` |
-| PR review with diff annotations | Annotated diff | `03-code-review-pr.html` |
-| PR writeup for reviewers | Author's writeup | `17-pr-writeup.html` |
-| Codebase walkthrough, module map | Boxes + arrows | `04-code-understanding.html` |
-| How a feature/concept works | Sticky-nav explainer | `14-research-feature-explainer.html`, `15-research-concept-explainer.html` |
-| Implementation/migration plan | Phased plan | `16-implementation-plan.html` |
-| Weekly/sprint status | Status report | `11-status-report.html` |
-| Incident / post-mortem | Timeline + checklist | `12-incident-report.html` |
-| Slide presentation | Scroll-snap deck | `09-slide-deck.html` |
-| Design tokens, component states | Token sheet | `05-design-system.html`, `06-component-variants.html` |
-| Animation/interaction prototype | Live sandbox | `07-prototype-animation.html`, `08-prototype-interaction.html` |
-| SVG figures, illustrations | Figure sheet | `10-svg-illustrations.html` |
-| Process flow, deploy pipeline | Clickable flowchart | `13-flowchart-diagram.html` |
-| Drag/sort/prioritize items | Triage editor | `18-editor-triage-board.html` |
-| Toggle config or feature flags | Flag editor + diff export | `19-editor-feature-flags.html` |
-| Tune a prompt/template live | Prompt tuner | `20-editor-prompt-tuner.html` |
-| Catalog or index of items | Card grid + masthead | `index.html` |
-
-When in doubt → **sticky-nav explainer**. It handles most documentation gracefully.
-
-## Typography rules
-
-The mix is intentional and is part of the visual identity.
-
-| Family | Variable | Use for |
-|---|---|---|
-| Serif (Georgia) | `--serif` | h1, h2, h3, card titles, blockquotes, footer `.k` italic, summary in `<details>` |
-| Sans (system-ui) | `--sans` | body paragraphs, descriptions, intros, button labels, table cells |
-| Mono (ui-monospace) | `--mono` | eyebrows, file names, indices, count pills, badges, code, table headers, metadata |
-
-Don't:
-- Use mono for body text
-- Use sans for h1/h2
-- Use a generic geometric sans (Inter, Manrope, etc.) — system-ui is intentional, it feels editorial-not-startup
-
-## Color rules
-
-| Token | When to use |
-|---|---|
-| `--ivory` (#FAF9F5) | Page background. Never pure white. |
-| `--paper` (#FFFFFF) | Cards, callouts, surfaces lifted off the page |
-| `--slate` (#141413) | h1, h2, primary headings, hover border on cards |
-| `--g700` (#3D3D3A) | Body text |
-| `--g500` (#87867F) | Labels, metadata, captions, footer text |
-| `--clay` (#D97757) | Italic em in titles, links, numbered indices, eyebrow line, accent details |
-| `--olive` (#788C5D) | Affirmative state: shipped, success, completed |
-| `--rust` (#B04A3F) | Warning state: slipped, blocked, at-risk |
-| `--oat` (#E3DACC) | Warm hover background on illustrations, decorative panels |
-| `--g100` / `--g200` / `--g300` | Tints, count pills, dividers, default 1.5px borders |
-
-`--clay` is the only loud accent. Use sparingly:
-- Italic emphasis in serif headings
-- Numbered section indices
-- The 24px line in eyebrows
-- Link color
-- Hover state markers
-
-Never use `--clay` as a large fill or background block. Borders, slim accents, and small fills only.
-
-## Layout
-
-Two canonical containers — pick by content type:
+Key tokens (always declare in `:root`):
 
 ```css
-/* Wide — for catalogs, comparisons, dashboards, multi-column grids */
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px 140px; }
+:root {
+  --canvas:      #0d1117;
+  --surface:     #161b22;
+  --fg:          #e6edf3;
+  --fg-muted:    #7d8590;
+  --accent:      #2f81f7;
+  --border:      #30363d;
+  --border-hover:#8b949e;
+  --btn-bg:      #21262d;
+  --btn-hover:   #30363d;
+  --success:     #238636;
+  --danger:      #f85149;
 
-/* Narrow — for documents, explainers, reports, plans, single-column reading */
-.page { max-width: 860px; margin: 0 auto; padding: 56px 32px 120px; }
-```
-
-Section spacing:
-- `margin-top: 72px` between top-level sections in catalog layouts
-- `margin: 48px 0 14px` for h2 in document layouts
-- `scroll-margin-top: 24px` so anchored navigation lands cleanly
-
-## Borders and radii
-
-Borders are `1.5px solid var(--g300)` — slightly thicker than the standard 1px, which gives the editorial weight. Don't use 1px borders.
-
-Radii:
-- `6px` — small chips, badges
-- `10px` — callouts, code blocks, tabs, details
-- `14px` — cards
-- `999px` — pills, count badges
-
-## Hover and transitions
-
-Cards:
-```css
-.card { transition: transform 150ms, box-shadow 150ms, border-color 150ms; }
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(20, 20, 19, 0.10);
-  border-color: var(--slate);
+  --mono: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace;
+  --sans: "Inter", system-ui, sans-serif;
 }
 ```
 
-Pills/links:
+Base body:
 ```css
-nav.pills a { transition: border-color 120ms, color 120ms; }
-nav.pills a:hover { border-color: var(--slate); color: var(--slate); }
+body {
+  font-family: var(--mono);
+  background: var(--canvas);
+  color: var(--fg);
+  line-height: 1.6;
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 800px;
+  -webkit-font-smoothing: antialiased;
+}
 ```
 
-No hover effect should change colors dramatically — the aesthetic is restrained.
+Use `var(--sans)` for buttons, labels, and interactive controls. Use `var(--mono)` for body text, headings, and code — it's intentional; it reinforces the technical, developer-tool aesthetic.
 
-## Quality checklist before delivering
+---
 
-- [ ] Single `.html` file, opens in a browser with no external requests
-- [ ] All tokens declared in `:root`; no hardcoded hex outside `:root`
-- [ ] Eyebrow with clay `::before` line is present (or page is genuinely too short to need it)
-- [ ] Hero h1 is serif with at least one italic `<em>` colored `--clay`
-- [ ] Body text is sans, headings are serif, labels/file names are mono
-- [ ] Borders are `1.5px solid var(--g300)`, never 1px
-- [ ] Real content from the user's request — no Lorem Ipsum, no placeholder names
-- [ ] Footer with serif-italic `.k` element is present
-- [ ] If interactive (deck, editor): keyboard works, focus styles visible
+## Choosing the right pattern
 
-## Anti-patterns
+Match the request to a structural pattern. Read `references/pattern-catalog.md` for full structural details on each.
 
-Don't:
-- Use a dark theme. The aesthetic is warm light. (`docs/DESIGN.md` describes an alternate dark system but it is not the default — only use it if the user explicitly asks.)
-- Use mono for body text (despite what `docs/DESIGN.md` says — it conflicts with this skill's default)
-- Use Inter, Manrope, or any geometric sans
-- Use 1px borders; the project uses 1.5px
-- Use heavy drop shadows except on card hover
-- Use gradients, glassmorphism, or decorative backgrounds
-- Use pure white as the page background — it must be `--ivory`
-- Skip the eyebrow + serif h1 hero — that opening is the signature
-- Use generic Bootstrap-style cards with a subtle gray background
-- Add introductory or summary fluff text — the page itself is the deliverable
+| Request type | Pattern |
+|---|---|
+| Compare approaches, options, or designs | **Side-by-side** |
+| PR, diff, or code change explanation | **Annotated document** |
+| Codebase walkthrough, module relationships | **Module map / diagram** |
+| How a feature or concept works | **Feature explainer** (sticky nav, collapsible steps, TL;DR) |
+| Implementation or project plan | **Phased plan** (milestones, phases, risk table) |
+| Weekly/sprint status | **Status report** (chart, shipped/slipped/next) |
+| Incident or post-mortem | **Incident timeline** |
+| Slide presentation | **Slide deck** (scroll-snap, arrow-key nav) |
+| Design tokens, component states | **Design system / component sheet** |
+| Interactive prototype, animation tuning | **Prototype / sandbox** |
+| Process flow, deploy pipeline | **Flowchart** (SVG, clickable nodes) |
+| Drag/organize/prioritize items | **Triage editor** (with export button) |
+| Toggle flags or config | **Flag/config editor** |
+| Prompt or template tuning | **Prompt tuner** |
+
+When the request doesn't match cleanly, default to the **Feature explainer** pattern — it handles most documentation well.
+
+---
+
+## HTML construction rules
+
+### Always self-contained
+- No external CSS or JS CDN links. Everything inline in `<style>` and `<script>`.
+- Fonts: use system stacks. Don't load Google Fonts. `var(--mono)` already falls back cleanly.
+- SVG icons: inline. No icon library imports.
+
+### Structure
+Every page needs:
+- `<!doctype html>` + `<html lang="en">`
+- `<meta charset="utf-8">` and viewport meta
+- A descriptive `<title>` derived from the actual content
+- `:root` with all tokens declared
+- A clean reset: `* { box-sizing: border-box; margin: 0; padding: 0; }`
+
+### Headings
+- `h2` elements: `border-bottom: 1px solid var(--border)`, `padding-bottom: 0.3em`, `margin-top: 2rem`
+- Use `var(--fg-muted)` for eyebrow labels (small caps, mono, `0.1em` letter-spacing)
+- Don't use `h1` as a section header — reserve it for the page title
+
+### Interactive elements
+- Buttons: `background: var(--btn-bg)`, `border: 1px solid var(--border)`, `border-radius: 6px`, `font-family: var(--sans)`, `padding: 5px 16px`, `font-size: 14px`
+- Hover: `background: var(--btn-hover)`, `border-color: var(--border-hover)`
+- Primary action: `background: var(--success)`, `color: #fff`
+- Destructive: start with `color: var(--danger)` on neutral bg; on hover, invert
+
+### Tables
+```css
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 13px; border: 1px solid var(--border); text-align: left; }
+th { background: var(--surface); font-weight: 600; }
+tr:nth-child(even) { background: rgba(22,27,34,0.5); }
+```
+
+### Code blocks
+```css
+pre, code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+pre { padding: 1rem; overflow-x: auto; }
+code { padding: 0.2em 0.4em; }
+```
+
+### Blockquotes / callouts
+```css
+blockquote {
+  border-left: 3px solid var(--border);
+  color: var(--fg-muted);
+  margin: 1.5rem 0;
+  padding: 0 1em;
+}
+```
+
+For callout boxes (TL;DR, warnings, highlights):
+```css
+.callout {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+}
+```
+
+---
+
+## Patterns with interactive JS
+
+For patterns that need interactivity (slide decks, editors, triage boards):
+
+**Slide deck** — keyboard nav:
+```js
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+});
+```
+Use `scroll-snap-type: y mandatory` on `body`, `scroll-snap-align: start` on each `.slide`.
+
+**Editors with export** — always end with a button that serializes the current state to text the user can paste or commit. The export closes the loop between the HTML artifact and the next step in the user's workflow.
+
+**Collapsible sections** — for explainers with many steps:
+```html
+<details>
+  <summary>Step 3 — Request hits rate-limit middleware</summary>
+  <div class="detail-body">…</div>
+</details>
+```
+Style `summary` with `cursor: pointer`, `padding: 0.5rem 0`, and a marker indicating expand/collapse state.
+
+---
+
+## What to do when the skill triggers
+
+1. Read the user's request carefully — identify the content type and the information they want communicated.
+2. Choose the pattern from the table above.
+3. If any of the example files in `/home/helio/Work/holistic-vision/` match the pattern closely, read that file for structural reference. Don't copy its colors — use the dark design system.
+4. Write the complete HTML to a file named descriptively (e.g., `feature-auth-explainer.html`, `week-23-status.html`, `refactor-plan.html`). Save it in the project root or wherever makes sense for the context.
+5. Open it in the browser if possible: `xdg-open <filename>.html`
+6. Tell the user the filename and what pattern you used.
+
+---
+
+## Quality check before delivering
+
+- [ ] Opens in a browser with no external requests
+- [ ] All tokens reference `:root` variables, no hardcoded hex values outside `:root`
+- [ ] Title is specific to the actual content, not generic
+- [ ] Content is real — populated from the user's actual request, not placeholder Lorem Ipsum
+- [ ] Interactive elements (if any) have visible focus styles
+- [ ] The page would be useful to someone who has never seen the source markdown
