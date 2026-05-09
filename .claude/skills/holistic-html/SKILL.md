@@ -80,6 +80,19 @@ Match the request to a structural pattern. Read `references/pattern-catalog.md` 
 
 When the request doesn't match cleanly, default to the **Feature explainer** pattern — it handles most documentation well.
 
+**Example file locations** (relative to this skill's install dir):
+| Category | Path |
+|---|---|
+| Exploration / planning | `examples/01-exploration/` |
+| Code review | `examples/02-code-review/` |
+| Design | `examples/03-design/` |
+| Prototyping | `examples/04-prototyping/` |
+| Diagrams | `examples/05-diagrams/` |
+| Decks | `examples/06-decks/` |
+| Research | `examples/07-research/` |
+| Reports | `examples/08-reports/` |
+| Editors | `examples/09-editors/` |
+
 ---
 
 ## HTML construction rules
@@ -182,7 +195,7 @@ Style `summary` with `cursor: pointer`, `padding: 0.5rem 0`, and a marker indica
 
 1. Read the user's request carefully — identify the content type and the information they want communicated.
 2. Choose the pattern from the table above.
-3. If any of the example files in `/home/helio/Work/holistic-vision/` match the pattern closely, read that file for structural reference. Don't copy its colors — use the dark design system.
+3. If any of the example files match the pattern closely, read it for structural reference. Examples are installed alongside this skill at `examples/<category>/<file>.html` (see category map below). Don't copy their colors — use the dark design system.
 4. Write the complete HTML to a file named descriptively (e.g., `feature-auth-explainer.html`, `week-23-status.html`, `refactor-plan.html`). Save it in the project root or wherever makes sense for the context.
 5. Open it in the browser if possible: `xdg-open <filename>.html`
 6. Tell the user the filename and what pattern you used.
