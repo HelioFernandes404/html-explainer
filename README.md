@@ -1,20 +1,129 @@
-# holistic-html
+# html-explainer
 
-A Claude Code skill that generates self-contained `.html` files instead of markdown — for documentation, reports, plans, code reviews, explainers, status updates, slide decks, and more.
+Toolkit for generating self-contained `.html` artifacts in Claude Code.
 
-## Install
+Instead of answering with a wall of markdown, `html-explainer` turns requests into browser-ready HTML for:
 
-```bash
-npx holistic-html
-```
+- documentation
+- explainers
+- plans
+- reports
+- code reviews
+- diagrams
+- slide decks
 
-Copies the skill and all 20 example files to `~/.claude/skills/holistic-html/`. Available in every Claude Code project after that.
+This repository has two separate workflows:
+
+1. `html-explainer` as a skill
+2. `html-explainer-prompt` as a standalone slash command for Claude Code and OpenCode
+
+## Workflows
+
+| Workflow | Use when | Invocation |
+|---|---|---|
+| Skill | You want Claude to auto-discover the capability, or you want to invoke it as a reusable skill | `/html-explainer` |
+| Prompt | You want an explicit manual command isolated from the skill system | `/html-explainer-prompt` |
+
+## Recommended use
+
+| Goal | Recommended workflow |
+|---|---|
+| Reusable capability that Claude can discover automatically | Skill |
+| Explicit one-shot command with manual control | Prompt |
+| Install both and choose per project/session | Both |
 
 ## What it does
 
-When you ask Claude for something that would normally produce a wall of markdown — an explanation, a plan, a report, a comparison — this skill produces a single browser-ready `.html` file instead.
+When the request has real structure, `html-explainer` produces a single browser-ready `.html` file instead of a markdown response.
 
 The output uses the **GitHub Dark Minimalist** design system: dark background (`#0d1117`), JetBrains Mono body, GitHub-style tokens, no external dependencies.
+
+## Install the skill
+
+Global install with the `vercel-labs/skills` pattern:
+
+```bash
+npx skills add https://github.com/HelioFernandes404/html-explainer --skill html-explainer -a claude-code -g
+```
+
+Project-local install:
+
+```bash
+npx skills add https://github.com/HelioFernandes404/html-explainer --skill html-explainer -a claude-code
+```
+
+This installs the skill at `~/.claude/skills/html-explainer/` or `.claude/skills/html-explainer/`.
+
+## Install the prompt
+
+Global install for Claude Code:
+
+```bash
+mkdir -p ~/.claude/commands
+curl -fsSL https://raw.githubusercontent.com/HelioFernandes404/html-explainer/main/.claude/commands/html-explainer-prompt.md -o ~/.claude/commands/html-explainer-prompt.md
+```
+
+Project-local install:
+
+```bash
+mkdir -p .claude/commands
+curl -fsSL https://raw.githubusercontent.com/HelioFernandes404/html-explainer/main/.claude/commands/html-explainer-prompt.md -o .claude/commands/html-explainer-prompt.md
+```
+
+This installs the prompt at `~/.claude/commands/html-explainer-prompt.md` or `.claude/commands/html-explainer-prompt.md`.
+
+Global install for OpenCode:
+
+```bash
+mkdir -p ~/.config/opencode/commands
+curl -fsSL https://raw.githubusercontent.com/HelioFernandes404/html-explainer/main/.opencode/commands/html-explainer-prompt.md -o ~/.config/opencode/commands/html-explainer-prompt.md
+```
+
+Project-local install for OpenCode:
+
+```bash
+mkdir -p .opencode/commands
+curl -fsSL https://raw.githubusercontent.com/HelioFernandes404/html-explainer/main/.opencode/commands/html-explainer-prompt.md -o .opencode/commands/html-explainer-prompt.md
+```
+
+This installs the OpenCode prompt at `~/.config/opencode/commands/html-explainer-prompt.md` or `.opencode/commands/html-explainer-prompt.md`.
+
+## Install both with the bundled installer
+
+```bash
+npx html-explainer
+```
+
+Only skill:
+
+```bash
+npx html-explainer --skill
+```
+
+Only prompt:
+
+```bash
+npx html-explainer --prompt
+```
+
+## Repository layout
+
+```text
+.
+├── .claude/
+│   ├── commands/
+│   │   └── html-explainer-prompt.md
+│   └── skills/
+│       └── html-explainer/
+│           ├── SKILL.md
+│           └── references/
+├── .opencode/
+│   └── commands/
+│       └── html-explainer-prompt.md
+├── bin/
+│   └── install.js
+└── examples/
+```
 
 ## Examples
 
@@ -37,13 +146,20 @@ Open any file in `examples/` in a browser to explore the references.
 ## Skill structure
 
 ```
-~/.claude/skills/holistic-html/
+~/.claude/skills/html-explainer/
 ├── SKILL.md
 ├── references/
 │   ├── design-tokens.md
 │   └── pattern-catalog.md
 └── examples/
     └── 01-exploration/ … 09-editors/
+```
+
+## Prompt structure
+
+```
+~/.claude/commands/html-explainer-prompt.md
+~/.config/opencode/commands/html-explainer-prompt.md
 ```
 
 ## License

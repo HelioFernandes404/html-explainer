@@ -1,15 +1,17 @@
 {
-  "name": "holistic-html",
+  "name": "html-explainer",
   "version": "1.0.0",
-  "description": "Claude Code skill for generating structured HTML output with the GitHub Dark Minimalist design system",
+  "description": "HTML explainer workflows for Claude Code: installable skill and standalone prompt",
   "bin": {
-    "holistic-html": "./bin/install.js"
+    "html-explainer": "./bin/install.js"
   },
   "files": [
     "bin/",
-    ".claude/skills/holistic-html/",
+    ".claude/commands/",
+    ".claude/skills/html-explainer/",
+    ".opencode/commands/",
     "examples/"
   ],
-  "keywords": ["claude", "claude-code", "skill", "html"],
+  "keywords": ["claude", "claude-code", "skill", "prompt", "html"],
   "license": "MIT"
 }

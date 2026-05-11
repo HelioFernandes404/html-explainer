@@ -1,9 +1,9 @@
 ---
-name: holistic-html
+name: html-explainer
 description: Produce a self-contained HTML file instead of markdown for any output that benefits from visual structure. Use this skill whenever the user asks for documentation, a report, a writeup, a plan, an explanation, a code review summary, a diagram, a status update, a slide deck, or any content that would otherwise become a wall of markdown text. Even when the user doesn't say "HTML" — if the output has structure, comparisons, timelines, code with annotations, or multiple sections, an HTML file will serve them far better. Always produce a single self-contained `.html` file, ready to open in a browser, styled with the project's GitHub Dark Minimalist design system.
 ---
 
-# holistic-html
+# html-explainer
 
 When producing output that has meaningful structure — comparisons, phases, timelines, code explanations, reports, plans — a self-contained HTML file is almost always better than markdown. Markdown gets skimmed; HTML gets read.
 

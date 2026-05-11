@@ -6,7 +6,17 @@ const path = require('path');
 const os = require('os');
 
 const PKG_DIR = path.dirname(__dirname);
-const INSTALL_DIR = path.join(os.homedir(), '.claude', 'skills', 'holistic-html');
+const SKILL_INSTALL_DIR = path.join(os.homedir(), '.claude', 'skills', 'html-explainer');
+const CLAUDE_COMMANDS_INSTALL_DIR = path.join(os.homedir(), '.claude', 'commands');
+const OPENCODE_COMMANDS_INSTALL_DIR = path.join(os.homedir(), '.config', 'opencode', 'commands');
+const args = new Set(process.argv.slice(2));
+const installSkill = args.size === 0 || args.has('--all') || args.has('--skill');
+const installPrompt = args.size === 0 || args.has('--all') || args.has('--prompt');
+
+if (!installSkill && !installPrompt) {
+  console.error('Usage: html-explainer [--skill] [--prompt] [--all]');
+  process.exit(1);
+}
 
 function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
@@ -31,28 +41,64 @@ function countFiles(dir, ext) {
   return count;
 }
 
-// 1. Install skill files
-const skillSrc = path.join(PKG_DIR, '.claude', 'skills', 'holistic-html');
-if (!fs.existsSync(skillSrc)) {
-  console.error('Error: skill source not found at', skillSrc);
-  process.exit(1);
+let htmlCount = 0;
+let skillFiles = 0;
+
+if (installSkill) {
+  const skillSrc = path.join(PKG_DIR, '.claude', 'skills', 'html-explainer');
+  if (!fs.existsSync(skillSrc)) {
+    console.error('Error: skill source not found at', skillSrc);
+    process.exit(1);
+  }
+  copyDir(skillSrc, SKILL_INSTALL_DIR);
+
+  const examplesSrc = path.join(PKG_DIR, 'examples');
+  if (fs.existsSync(examplesSrc)) {
+    copyDir(examplesSrc, path.join(SKILL_INSTALL_DIR, 'examples'));
+    htmlCount = countFiles(examplesSrc, '.html');
+  }
+
+  skillFiles = countFiles(SKILL_INSTALL_DIR, null) - htmlCount;
 }
-copyDir(skillSrc, INSTALL_DIR);
 
-// 2. Install examples alongside the skill
-const examplesSrc = path.join(PKG_DIR, 'examples');
-if (fs.existsSync(examplesSrc)) {
-  copyDir(examplesSrc, path.join(INSTALL_DIR, 'examples'));
+let claudePromptDest = '';
+let opencodePromptDest = '';
+if (installPrompt) {
+  const claudePromptSrc = path.join(PKG_DIR, '.claude', 'commands', 'html-explainer-prompt.md');
+  const opencodePromptSrc = path.join(PKG_DIR, '.opencode', 'commands', 'html-explainer-prompt.md');
+  if (!fs.existsSync(claudePromptSrc)) {
+    console.error('Error: Claude prompt source not found at', claudePromptSrc);
+    process.exit(1);
+  }
+  if (!fs.existsSync(opencodePromptSrc)) {
+    console.error('Error: OpenCode prompt source not found at', opencodePromptSrc);
+    process.exit(1);
+  }
+  fs.mkdirSync(CLAUDE_COMMANDS_INSTALL_DIR, { recursive: true });
+  fs.mkdirSync(OPENCODE_COMMANDS_INSTALL_DIR, { recursive: true });
+  claudePromptDest = path.join(CLAUDE_COMMANDS_INSTALL_DIR, 'html-explainer-prompt.md');
+  opencodePromptDest = path.join(OPENCODE_COMMANDS_INSTALL_DIR, 'html-explainer-prompt.md');
+  fs.copyFileSync(claudePromptSrc, claudePromptDest);
+  fs.copyFileSync(opencodePromptSrc, opencodePromptDest);
 }
 
-const htmlCount = fs.existsSync(examplesSrc) ? countFiles(examplesSrc, '.html') : 0;
-const skillFiles = countFiles(INSTALL_DIR, null) - htmlCount;
-
 console.log('');
-console.log('holistic-html installed');
+console.log('html-explainer installed');
 console.log('');
-console.log('  skill   →', INSTALL_DIR);
-console.log('  files   →', skillFiles, 'skill files,', htmlCount, 'example HTML files');
+if (installSkill) {
+  console.log('  skill   →', SKILL_INSTALL_DIR);
+  console.log('  files   →', skillFiles, 'skill files,', htmlCount, 'example HTML files');
+}
+if (installPrompt) {
+  console.log('  prompt  →', claudePromptDest);
+  console.log('  opencode→', opencodePromptDest);
+}
 console.log('');
-console.log('The skill is now available in all Claude Code projects.');
+if (installSkill && installPrompt) {
+  console.log('The skill and prompt are now available in all Claude Code projects.');
+} else if (installSkill) {
+  console.log('The skill is now available in all Claude Code projects.');
+} else {
+  console.log('The prompt is now available in all Claude Code projects.');
+}
 console.log('');
